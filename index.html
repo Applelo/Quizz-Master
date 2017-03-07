@@ -13,9 +13,12 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 
     <!-- Custom CSS -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <link href="css/custom.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,30 +37,30 @@
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#">
+                    <a href="#themes">
                         Thèmes
                     </a>
                 </li>
                 <li>
-                    <a href="#">Dinosaures</a>
+                    <a href="#" class="dinosaures"><i class="fa fa-paw" aria-hidden="true"></i> Dinosaures</a>
                 </li>
                 <li>
-                    <a href="#">Culture Générale</a>
+                    <a href="#" class="culture-generale"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Culture Générale</a>
                 </li>
                 <li>
-                    <a href="#">Vie sous marine</a>
+                    <a href="#" class="marine"><i class="fa fa-ship" aria-hidden="true"></i> Vie sous marine</a>
                 </li>
                 <li>
-                    <a href="#">Guerres</a>
+                    <a href="#" class="guerres"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Guerres</a>
                 </li>
                 <li>
-                    <a href="#">Couleurs</a>
+                    <a href="#" class="couleurs" style="color:white;"><i class="fa fa-contao" aria-hidden="true"></i> Couleurs</a>
                 </li>
                 <li>
-                    <a href="#">Jeux vidéos</a>
+                    <a href="#" class="jeux-videos"><i class="fa fa-gamepad" aria-hidden="true"></i> Jeux vidéos</a>
                 </li>
                 <li>
-                    <a href="#">Mécanique Quantique</a>
+                    <a href="#" class="mecaniques-quantique"><i class="fa fa-flask" aria-hidden="true"></i> Mécanique Quantique</a>
                 </li>
             </ul>
         </div>
@@ -95,6 +98,13 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+
+    $(".sidebar-nav li a").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        
+    });
+
     </script>
 
 </body>
