@@ -23,3 +23,26 @@
       75%  {background:green;}
       100%   {background:red;}
     }
+
+
+    .collapse-panel .fa.arrow:before {
+      content: "\f107";
+    }
+
+    .collapsed .fa.arrow:before {
+      content: "\f104";
+    }
+
+    .panel-question {
+      border: solid 1px black;
+    }
+
+    .panel-question-fill {
+      border: solid 1px black;
+      background-color: black;
+      color: white;
+    }
+
+    footer {
+      display:none;
+    }

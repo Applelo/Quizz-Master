@@ -57,9 +57,6 @@
                     <a href="#" class="couleurs" style="color:white;"><i class="fa fa-contao" aria-hidden="true"></i> Couleurs</a>
                 </li>
                 <li>
-                    <a href="#" class="jeux-videos"><i class="fa fa-gamepad" aria-hidden="true"></i> Jeux vidéos</a>
-                </li>
-                <li>
                     <a href="#" class="mecaniques-quantique"><i class="fa fa-flask" aria-hidden="true"></i> Mécanique Quantique</a>
                 </li>
             </ul>
@@ -73,16 +70,26 @@
                     <div class="col-lg-12">
                         <h1>Quizz Master</h1>
                         <h2>The most powerful quizz in jQuery and Ajax</h2>
-                        <p>Quizz Master est le quizz où s'amuser est une priorité !</p>
-                        <p>Plusieurs thèmes, plusieurs questions et surtout plusieurs réponses possibles !</p>
+                        <p class='description'>Quizz Master est le quizz où s'amuser est une priorité !<br/>
+                          Plusieurs thèmes, plusieurs questions et surtout plusieurs réponses possibles !</p>
                         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Choisissez un thème</a>
                         <a class="btn btn-default">Scores</a>
+                    </div>
+                    <div class="col-lg-6">
+                      <!-- <div class="panel">
+                          <div class="panel-heading collapse-panel" data-toggle="collapse">
+                              Question 1 <span class="fa arrow"></span>
+                          </div>
+                          <div class="panel-body collapse">Coucou</div>
+                      </div> -->
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-
+        <footer class="navbar navbar-inverse navbar-fixed-bottom">
+          <p class="timer"></a>
+        </footer>
     </div>
     <!-- /#wrapper -->
 
@@ -91,6 +98,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/game.js"></script>
 
     <!-- Menu Toggle Script -->
     <script>
@@ -102,8 +111,10 @@
     $(".sidebar-nav li a").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
-        
+        print_info($(this).attr("class"));
+        print_questions($(this).attr("class"));
     });
+
 
     </script>
 
