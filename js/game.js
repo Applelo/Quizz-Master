@@ -1,67 +1,199 @@
-var themes = { "dinosaures" : "Dinosaures", "culture-generale" : "Culture Générale", "marine" : "Vie sous marine", "guerres" : "Guerres", "couleurs" : "Couleurs", "mecaniques-quantique" : "Mécanique Quantique"};
-var id_themes = {"dinosaures" : 1, "culture-generale" : 2, "marine" : 3, "guerres" : 4, "couleurs" : 5, "mecaniques-quantique" : 6};
+var themes = {
+    "dinosaures": "Dinosaures",
+    "culture-generale": "Culture Générale",
+    "marine": "Vie sous marine",
+    "guerres": "Guerres",
+    "couleurs": "Couleurs",
+    "mecaniques-quantique": "Mécanique Quantique"
+};
+var id_themes = {
+    "dinosaures": 1,
+    "culture-generale": 2,
+    "marine": 3,
+    "guerres": 4,
+    "couleurs": 5,
+    "mecaniques-quantique": 6
+};
+var q_finish = 0;
+var score = 0;
 
+sumjq = function(selector) {
+    var sum = 0;
+    $(selector).each(function() {
+        sum += Number($(this).text());
+    });
+    return sum;
+};
 
+function menu() {
+$("#menu-toggle").on("click",function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+});
+
+$(".sidebar-nav li a").on("click",function(e) {
+    var id_theme = $(this).attr("class");
+    e.preventDefault();
+    $("#wrapper").removeClass("toggled");
+    print_info(id_theme);
+    print_questions(id_theme);
+    setInterval(time_manager, 1000);
+
+    $('#wrapper').on( "click", "#soumission", function() {
+      send_check_open(id_theme);
+    });
+});
+}
 
 function print_info(id) {
-  $("h1").text(themes[id]);
-  $(".btn-default").remove();
-  $("h2").remove();
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    url: "php/ajax.php",
-    data: "action=get_description&id=" + id_themes[id],
-    success: function(data) {
-        $(".description").text(data);
-    }
-  });
-  $("footer").css("display","block");
+    $("h1").text(themes[id]);
+    $(".btn-default").remove();
+    $("h2").remove();
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "php/ajax.php",
+        data: "action=get_description&id=" + id_themes[id],
+        success: function(data) {
+            $(".description").text(data);
+        }
+    });
+    $("footer").css("display", "block");
 }
 
 function print_questions(id) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    url: "php/ajax.php",
-    data: "action=get_questions&id=" + id_themes[id],
-    success: function(data) {
-      var result = "";
-      for (var i = 0; i < data.length; i++) {
-        if (i == 0)
-          result = result + "<div class='panel panel-question'><div class='panel-heading  collapse-panel ' aria-expanded='true'";
-        else
-          result = result + "<div class='panel panel-question'><div class='panel-heading collapse-panel collapsed'";
-        result = result + " data-toggle='collapse' data-target='#question" + (i+1) + "'>Question " + (i+1) + " : " + data[i]["question"] + " <span class='fa arrow'></span></div><div class='panel-body collapse";
-        if (i == 0)
-          result = result + " in' id='question" + (i+1) + "'><p>";
-        else
-          result = result + "' id='question" + (i+1) + "'><p>";
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "php/ajax.php",
+        data: "action=get_questions&id=" + id_themes[id],
+        success: function(data) {
+            var result = "";
+            for (var i = 0; i < data.length; i++) {
+                if (i === 0)
+                    result = result + "<div class='panel panel-question' onclick='timer_lauch_and_stop(this);'><div class='panel-heading  collapse-panel ' aria-expanded='true'";
+                else
+                    result = result + "<div class='panel panel-question' onclick='timer_lauch_and_stop(this);'><div class='panel-heading collapse-panel collapsed'";
+                result = result + " data-toggle='collapse' data-target='#question" + (i + 1) + "'><u>Question " + (i + 1) + " :</u> " + data[i]["question"] + "<span class='fa arrow'></span></br>Temps : <span class='timer' id='timer-" + i + "'></span> secondes</div><div class='panel-body collapse";
+                if (i === 0)
+                    result = result + " in' id='question" + (i + 1) + "'><p>";
+                else
+                    result = result + "' id='question" + (i + 1) + "'><p>";
 
 
-        for (var j = 0; j < data[i]["reponses"].length; j++) {
+                for (var j = 0; j < data[i]["reponses"].length; j++) {
 
-          result = result + "<input type='checkbox' id='reponse" + data[i]["reponse_id"][j] + "' /> <label for='" + data[i]["reponse_id"][j] + "'>" + data[i]["reponses"][j] + "</label><br />";
+                    result = result + "<input type='checkbox' id='reponse" + data[i]["reponse_id"][j] + "' /> <label for='reponse" + data[i]["reponse_id"][j] + "'>" + data[i]["reponses"][j] + "</label><br />";
+                }
+
+                result = result + "</p></div></div>";
+            }
+            $('.q_total').text(data.length);
+            $(".col-lg-6").html(result);
+            $('.panel-body').on("change", ":checkbox", function() {
+                if ($(this).parent().find('input:checkbox:checked').length > 0) {
+                    $(this).parent().parent().parent().addClass('panel-question-fill');
+                    $(this).parent().parent().parent().removeClass('panel-question');
+                } else {
+                    $(this).parent().parent().parent().addClass('panel-question');
+                    $(this).parent().parent().parent().removeClass('panel-question-fill');
+                }
+            });
+            var countdown = new Date();
+            countdown.setSeconds(countdown.getSeconds(98) + 3);
+            $('span.timer').countdown(countdown, function(event) {
+                $(this).text(event.strftime('%S'));
+            });
+            $(".collapsed .timer").countdown('pause');
+
+
         }
+    });
+}
 
-        result = result + "<p>";
+function timer_lauch_and_stop(e) {
+    id_timer = "#" + $(e).children(".panel-heading").children(".timer").attr('id');
+    $(id_timer).parent().parent().parent().find(".panel").on('hidden.bs.collapse', function() {
+        $(id_timer).countdown('pause');
+    });
+    $(id_timer).parent().parent().parent().find(".panel").on('show.bs.collapse', function() {
+        var countdown = new Date();
+        countdown.setSeconds(countdown.getSeconds(98) + Number($(id_timer).text()));
+        $(id_timer).countdown(countdown);
+        $(id_timer).countdown('resume');
+    });
+}
 
-
-
-        result = result + "</div></div>";
-      }
-
-      $(".col-lg-6").html(result);
-      $('.panel-body').on( "change", ":checkbox", function() {
-        if ($(this).parent().find('input:checkbox:checked').length > 0) {
-          $(this).parent().parent().parent().addClass('panel-question-fill');
-          $(this).parent().parent().parent().removeClass('panel-question');
+function time_manager() {
+    $('.timer-all').text(sumjq('.timer'));
+    $(".timer").each(function() {
+        if ($(this).text() == 0) { //Bloque le collapse
+            //alert($(this).parent().parent().parent().find(".panel-heading").attr('data-target'))
+            if (typeof $(this).parent().parent().find(".panel-heading").attr('data-target') !== typeof undefined) {
+                q_finish++;
+                $(this).find("input:checkbox:checked").prop("disabled", "true");
+                $(this).parent().parent().find(".in").removeClass("in");
+                $(this).parent().parent().find(".panel-heading").removeAttr("data-target");
+                $(this).parent().parent().find(".panel-heading").addClass("collapse-block");
+            }
         }
-        else {
-          $(this).parent().parent().parent().addClass('panel-question');
-          $(this).parent().parent().parent().removeClass('panel-question-fill');
+    });
+    $('.q_finished').text(q_finish);
+}
+
+function send_check_open(id) {
+    $('.panel-body').addClass("in"); //add a class in to open all element
+    $(".panel-heading").removeAttr("data-target"); //Prevent to people want to close
+    $("input:checkbox").attr("disabled", true); //Block checkbox
+    $(".collapsed, .collapse-panel").addClass("collapse-block"); //Add a cross block with no answer
+    $(".timer").countdown('pause'); //Stop all timer
+
+    $.ajax({
+        type: 'POST',
+        url: "php/ajax.php",
+        data: "action=get_result&id=" + id_themes[id],
+        dataType: 'json',
+        success: function(data) {
+            //alert(JSON.stringify(data));
+
+            $("input:checkbox").each(function() {
+                if (data[$(this).attr("id")] == 1)
+                    $("label[for='" + $(this).attr("id") + "']").css("color", "green");
+                else {
+                    $("label[for='" + $(this).attr("id") + "']").css("color", "red");
+                }
+            });
+
+            //calcule le score
+
+            $("footer .text-left").append(" | Score : " + score);
+
+            $("input:checkbox:checked").each(function() { //Add icon afte
+                if (data[$(this).attr("id")] == 1)
+                    $("label[for='" + $(this).attr("id") + "']").prepend("<i class='fa fa-check' aria-hidden='true'></i> ");
+                else {
+                    $("label[for='" + $(this).attr("id") + "']").prepend("<i class='fa fa-times' aria-hidden='true'></i> ");
+                }
+            });
+            $("input:checkbox:checked").remove();
+            $("#soumission").replaceWith('<a class="btn btn-primary navbar-right" id="send_score">Continuer</a>'); //Change le bouton Soummetre en Continuer
+            $("#send_score").on("click", function() {
+              reset();//A changer
+            });
         }
-      });
-    }
-  });
+    });
+
+}
+
+function reset() {
+  var q_finish = 0;
+  var score = 0;
+  $(".col-lg-6").text("");//reset .col-lg-6 content
+  $(".col-lg-12").html("<h1>Quizz Master</h1><h2>The most powerful quizz in jQuery and Ajax</h2><p class='description'>Quizz Master est le quizz où s'amuser est une priorité !<br/>Plusieurs thèmes, plusieurs questions et surtout plusieurs réponses possibles !</p><a href='#menu-toggle' class='btn btn-default' id='menu-toggle'>Choisissez un thème</a><a class='btn btn-default'>Scores</a>");//reset .col-lg-6 content
+
+  $("#send_score").replaceWith('<a class="btn btn-primary navbar-right" id="soumission">Soumettre</a>'); //Change le bouton Soummetre en Continuer
+  $("footer .text-left").html('Total temps restants : <span class="timer-all"></span> secondes | Questions  <span class="q_finished">0</span> / <span class="q_total">0</span>');
+
+  $("footer").css("display", "none");
+  menu();
 }

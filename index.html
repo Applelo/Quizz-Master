@@ -76,19 +76,17 @@
                         <a class="btn btn-default">Scores</a>
                     </div>
                     <div class="col-lg-6">
-                      <!-- <div class="panel">
-                          <div class="panel-heading collapse-panel" data-toggle="collapse">
-                              Question 1 <span class="fa arrow"></span>
-                          </div>
-                          <div class="panel-body collapse">Coucou</div>
-                      </div> -->
+
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
         <footer class="navbar navbar-inverse navbar-fixed-bottom">
-          <p class="timer"></a>
+          <div class="container">
+          <a class="btn btn-primary navbar-right" id="soumission">Soumettre</a>
+          <p class="text-left">Total temps restants : <span class="timer-all"></span> secondes | Questions  <span class="q_finished">0</span> / <span class="q_total">0</span></p>
+        </div>
         </footer>
     </div>
     <!-- /#wrapper -->
@@ -99,24 +97,12 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
+  <script type="text/javascript" src="js/jquery.countdown.min.js"></script>
+
     <script src="js/game.js"></script>
 
     <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-
-    $(".sidebar-nav li a").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-        print_info($(this).attr("class"));
-        print_questions($(this).attr("class"));
-    });
-
-
-    </script>
+    <script>menu();</script>
 
 </body>
 
