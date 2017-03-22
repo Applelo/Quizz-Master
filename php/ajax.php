@@ -14,6 +14,8 @@ if (checkAjax() && isset($_POST["action"]) && !empty($_POST["action"])) {
       case "get_description": get_description($connexion, $_POST["id"]); break;
       case "get_questions": get_questions($connexion, $_POST["id"]); break;
       case "get_result": get_result($connexion, $_POST["id"]); break;
+      case "send_score": send_score($connexion, $_POST["pseudo"], $_POST["score"], $_POST["date_heure"], $_POST["temps"], $_POST['id_theme']); break;
+      case "get_score": get_score($connexion); break;
     }
 }
 
@@ -78,4 +80,44 @@ WHERE id_theme = " . $id;
     }
     header('Content-Type: application/json');
     echo json_encode($result);
+}
+
+function send_score($connexion, $pseudo, $score, $date_heure, $temps, $id_theme) {
+  $pseudo = htmlspecialchars($pseudo);
+  $score = (int)htmlspecialchars($score);
+  $date_heure = htmlspecialchars($date_heure);
+  $temps = (int)htmlspecialchars($temps);
+  $id_theme = (int)htmlspecialchars($id_theme);
+
+  $sql = "INSERT INTO `scores` (`id`, `pseudo`, `score`, `date_heure`, `temps`, `id_theme`)
+  VALUES (NULL, :pseudo, :score, :date_heure, :temps, :id_theme)";
+  $query = $connexion->prepare($sql);
+  $query->bindValue(":pseudo", $pseudo, PDO::PARAM_STR);
+  $query->bindValue(":score", $score, PDO::PARAM_INT);
+  $query->bindValue(":date_heure", $date_heure, PDO::PARAM_STR);
+  $query->bindValue(":temps", $temps, PDO::PARAM_INT);
+  $query->bindValue(":id_theme", $id_theme, PDO::PARAM_INT);
+  $query->execute();
+  $query = null;
+}
+
+function get_score($connexion) {
+  $result = array();
+  for ($i=0; $i < 6; $i++) {
+    $result[$i] = array();
+    $j = 0;
+    $sql = "SELECT * FROM scores WHERE id_theme = " . ($i+1);
+    $exec = $connexion->query($sql);
+    $scores = $exec->fetchAll(PDO::FETCH_OBJ);
+    foreach ($scores as $s) {
+      $result[$i][$j]["pseudo"] = $s->pseudo;
+      $result[$i][$j]["score"] = $s->score;
+      $result[$i][$j]["date_heure"] = $s->date_heure;
+      $result[$i][$j]["temps"] = $s->temps;
+      $j++;
+    }
+  }
+
+  header('Content-Type: application/json');
+  echo json_encode($result);
 }
