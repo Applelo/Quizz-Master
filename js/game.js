@@ -240,7 +240,6 @@ function reset() {
 }
 
 function send_score() {
-  alert(current_theme);
   $.post("php/ajax.php", {
     action : "send_score",
     pseudo : $("input[name=pseudo]").val(),
