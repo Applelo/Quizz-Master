@@ -17,11 +17,14 @@ $serveur = 'localhost';
 $bdd = 'quizz';
 $user = 'root';
 $mdp = 'root';
+$options = array(
+    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+);
 
 //L'instruction Try/Catch permet de traiter les erreurs éventuelles de connexion
 try {
 	//on déclare la variable $connexion et on lui attribue les infos de connexion en créant une instance PDO
-	$connexion = new PDO('mysql:host=' . $serveur . ';dbname=' . $bdd, $user, $mdp);
+	$connexion = new PDO('mysql:host=' . $serveur . ';dbname=' . $bdd, $user, $mdp, $options);
 	//afin de vérifier la connexion, on affiche un message que l'on peut masquer ensuite
 	// echo 'connexion ok<br>';
 } catch(Exception $e) {
