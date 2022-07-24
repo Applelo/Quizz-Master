@@ -1,6 +1,6 @@
 # Quizz-Master
 The most powerful quizz in jQuery and Ajax (it's just a description to incite to click).
-Only available in french with questions by [LIyth](href "https://github.com/LIyth"). Six themes are available :
+Only available in french with questions by [LIyth](https://github.com/LIyth). Six themes are available :
 
 
 * Dinosaurs
@@ -12,14 +12,12 @@ Only available in french with questions by [LIyth](href "https://github.com/LIyt
 
 Several questions & multiples answers possible :)
 
-Test the project here : [Quizz-Master Website](href "http://quizzmaster.lois-boubault.fr")
-
 **Frameworks**
 
-* [Bootstrap](href "https://github.com/twbs/bootstrap")
-* [jQuery](href "https://github.com/jquery/jquery")
+* [Bootstrap](https://github.com/twbs/bootstrap)
+* [jQuery](https://github.com/jquery/jquery)
 
 **Javascript/jQuery Plugin**
 
-* [Moment](href "https://github.com/moment/moment")
-* [Final Countdown](href "https://github.com/hilios/jQuery.countdown")
+* [Moment](https://github.com/moment/moment)
+* [Final Countdown](https://github.com/hilios/jQuery.countdown)
